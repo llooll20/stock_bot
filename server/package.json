@@ -1,14 +1,16 @@
 {
   "dependencies": {
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "nodemon": "^3.1.7",
+    "server": "file:",
+    "sqlite3": "^5.1.7"
   },
   "scripts": {
-    "start": "npm run server"
+    "start": "nodemon run server"
   },
   "name": "server",
   "version": "1.0.0",
   "main": "server.js",
-  "devDependencies": {},
   "author": "",
   "license": "ISC",
   "description": "",
