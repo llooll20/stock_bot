@@ -1,7 +1,12 @@
+import Chart from "./components/Chart";
+import "./App.css";
+
 function App() {
   return (
     <div className="App">
-      <h1>This is Client</h1>
+      <div className="ChartContainer">
+        <Chart />
+      </div>
     </div>
   );
 }
