@@ -46,6 +46,11 @@ app.get("/", async (req, res) => {
     console.log(`데이터 없음`);
   }
 });
+
+app.get("/login", (req, res) => {
+  res.send("HOME");
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
