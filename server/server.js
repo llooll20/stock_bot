@@ -9,7 +9,14 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
+//초기화 반복 방지
+let isInitialized = false;
+
 app.get("/", async (req, res) => {
+  //초기화 확인
+  if(isInitialized) { return; }
+  isInitialized = true;
+
   initialize()
     .then(() => {
       console.log("데이터베이스가 초기화되었습니다.");

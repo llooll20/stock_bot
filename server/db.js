@@ -4,8 +4,10 @@ import fs from "fs";
 import path from "path";
 import db from "./lib/varDB.js";
 
+//db 초기화
 export const InitDatabase = () => {
-  return new Promise((resolve, reject) => {
+  //주식 테이블 초기화
+  const createStockTable = new Promise((resolve, reject) => {
     db.run(
       `
       CREATE TABLE IF NOT EXISTS stock_data (
@@ -24,12 +26,38 @@ export const InitDatabase = () => {
           console.error("테이블 생성 실패:", err.message);
           reject(err);
         } else {
-          console.log("테이블이 준비되었습니다.");
+          console.log("stock 테이블이 생성되었습니다.");
           resolve();
         }
-      }
+      }    
     );
+  }
+);
+  //유저 테이블 초기화
+  const createUserTable = new Promise((resolve, reject)=> {
+  db.run(
+      `
+      CREATE TABLE IF NOT EXISTS user(
+        num INTEGER PRIMARY KEY AUTOINCREMENT,
+          id TEXT NOT NULL,
+          password TEXT NOT NULL,
+          nickname TEXT NULL,
+          balance INTEGER NULL
+      )
+      `,
+      (err) => {
+        if (err) {
+          console.error("테이블 생성 실패:", err.message);
+          reject(err);
+        } else{
+          console.log("user 테이블이 생성되었습니다.");
+            resolve();
+        }
+      }
+    )
   });
+  
+  return Promise.all([createStockTable, createUserTable]);
 };
 
 // 데이터 삽입 함수
