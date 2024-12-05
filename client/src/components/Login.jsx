@@ -11,16 +11,18 @@ function Login() {
   });
   const [error, setError] = useState("");
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+    setFormData((formData) => {
+      return {
+        ...formData,
+        [e.target.name]: e.target.value,
+      };
     });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      console.log(formData);
+      //console.log(formData);
 
       const res = await axios.post(
         "http://localhost:5000/api/login",
@@ -43,14 +45,13 @@ function Login() {
     }
   };
   return (
-    <div className="loginForm_container">
+    <div className="login_container">
       {error && <p className="error">{error}</p>}
-      <form onSubmit={handleSubmit}>
+      <form className="loginForm_container" onSubmit={handleSubmit}>
         <div>
-          <label>계정이름</label>
           <input
             type="text"
-            name="text"
+            name="nickname"
             placeholder="아이디"
             value={formData.nickname}
             onChange={handleChange}
@@ -58,7 +59,6 @@ function Login() {
           />
         </div>
         <div>
-          <label>비밀번호</label>
           <input
             type="password"
             name="password"
