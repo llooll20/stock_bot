@@ -14,17 +14,18 @@ let isInitialized = false;
 
 app.get("/", async (req, res) => {
   //초기화 확인
-  if(isInitialized) { return; }
-  isInitialized = true;
+  if (isInitialized === false) {
+    isInitialized = true;
+    initialize()
+      .then(() => {
+        console.log("데이터베이스가 초기화되었습니다.");
+      })
+      .catch((err) => {
+        console.error("데이터베이스 초기화 실패:", err);
+        process.exit(1);
+      });
+  }
 
-  initialize()
-    .then(() => {
-      console.log("데이터베이스가 초기화되었습니다.");
-    })
-    .catch((err) => {
-      console.error("데이터베이스 초기화 실패:", err);
-      process.exit(1);
-    });
   try {
     const countResult = await new Promise((resolve, reject) => {
       db.get("SELECT COUNT(*) as count FROM stock_data", (err, row) => {
