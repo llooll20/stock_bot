@@ -38,11 +38,8 @@ export const InitDatabase = () => {
   db.run(
       `
       CREATE TABLE IF NOT EXISTS user(
-        num INTEGER PRIMARY KEY AUTOINCREMENT,
-          id TEXT NOT NULL,
-          password TEXT NOT NULL,
-          nickname TEXT NULL,
-          balance INTEGER NULL
+          id TEXT NOT NULL PRIMARY KEY,
+          password TEXT NOT NULL
       )
       `,
       (err) => {
@@ -184,16 +181,29 @@ export const initialize = async () => {
 //유저 정보 입력(미완성)
 export const insertUserData = (id, password) => {
   return new Promise((resolve, reject) => {
-    db.run(
-      "INSERT INTO user (id, password) VALUES ($id, $password)", 
-      { $id: id, $password: password },
-      function(err) {
-        if (err) {
-          reject("유저 정보 입력에 오류가 발생하였습니다.");
-        } else {
-          resolve("유저 정보를 입력하였습니다.");
-        }
-      }
+    const stmt = db.prepare(
+      `
+      INSERT INTO user
+      (id, password) 
+      VALUES (?, ?)
+    `
     );
+
+    // sql 실행
+    stmt.run(id, password, function (err) {
+      if (err) {
+        console.error("데이터 삽입 오류:", err.message);
+        reject(err);
+      } else {
+        console.log("사용자 데이터 삽입 성공");
+        resolve();
+      }
+    });
+
+    stmt.finalize((err) => {
+      if (err) {
+        console.error("Prepared Statement 종료 오류:", err.message);
+      }
+    });
   });
 };

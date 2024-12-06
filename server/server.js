@@ -7,8 +7,7 @@ import { Strategy } from "passport-local";
 import session from "express-session";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt"; // 비밀번호 암호화
-
-const LocalStrategy = Strategy;
+import { initializePassport } from "./passport_tool.js";
 
 const app = express();
 const PORT = 5000;
@@ -36,6 +35,7 @@ app.use(
 app.use(passport.initialize()); //passport초기화
 app.use(passport.session());
 
+initializePassport(passport);
 //초기화 반복 방지
 let isInitialized = false;
 
@@ -94,12 +94,36 @@ app.post("/api/signup", async (req, res) => {
   res.status(201).json({ message: "회원가입 성공!" });
 });
 
+/*
 // 로그인 API
 app.post("/api/login", (req, res) => {
   console.log(req.body);
 
   res.send("GET");
 });
+*/
+
+//로그인 passport를 이용한 로그인
+app.post('/api/login', (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      console.log("로그인 실패 후:", req.user);
+      return res.redirect("/login"); // 로그인 실패 시 리디렉션
+    }
+    req.login(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      console.log("로그인 성공 후:", req.user);
+      console.log(res.status);
+      return res.redirect("/"); // 로그인 성공 후 리디렉션
+    });
+  })(req, res, next);
+});
+
 
 app.get("/login", (req, res) => {
   res.send("HOME");
@@ -108,3 +132,4 @@ app.get("/login", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
