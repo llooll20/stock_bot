@@ -8,7 +8,7 @@ function SignUp() {
 
   const [formData, setFormData] = useState({
     nickname: "",
-    passowrd: "",
+    password: "",
     confirmPassword: "",
   });
 
@@ -16,9 +16,9 @@ function SignUp() {
   const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
-    setFormData((formData) => {
+    setFormData((data) => {
       return {
-        ...formData,
+        ...data,
         [e.target.name]: e.target.value,
       };
     });
@@ -28,14 +28,8 @@ function SignUp() {
     e.preventDefault();
     setError("");
     setSuccess("");
-    if (formData.passowrd !== formData.confirmPassword) {
-      console.log(
-        typeof formData.passowrd,
-        typeof formData.confirmPassword,
-        formData.passowrd,
-        formData.confirmPassword,
-        formData.nickname
-      );
+
+    if (formData.password !== formData.confirmPassword) {
       setError("비밀번호가 일치하지 않습니다");
       return;
     }
@@ -44,7 +38,7 @@ function SignUp() {
         "http://localhost:5000/api/signup",
         {
           nickname: formData.nickname,
-          passowrd: formData.passowrd,
+          password: formData.password,
         },
         { withCredentials: true }
       );
@@ -71,18 +65,17 @@ function SignUp() {
           <input
             type="text"
             name="nickname"
-            value={formData.nickname || ""}
+            value={formData.nickname}
             placeholder="사용할 아이디 입력"
             onChange={handleChange}
             required
           />
         </div>
-
         <div>
           <input
             type="password"
             name="password"
-            value={formData.password || ""}
+            value={formData.password}
             placeholder="비밀번호 입력"
             onChange={handleChange}
             required
@@ -92,7 +85,7 @@ function SignUp() {
           <input
             type="password"
             name="confirmPassword"
-            value={formData.confirmPassword || ""}
+            value={formData.confirmPassword}
             placeholder="비밀번호 확인"
             onChange={handleChange}
             required

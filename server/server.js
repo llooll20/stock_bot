@@ -81,6 +81,11 @@ app.get("/", async (req, res) => {
   }
 });
 
+app.post("/api/signup", (req, res) => {
+  console.log(`회원가입 페이지`, req.body);
+  res.send("GET signUP Page");
+});
+
 // 로그인 API
 app.post("/api/login", (req, res) => {
   console.log(req.body);
