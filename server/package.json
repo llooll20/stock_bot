@@ -1,8 +1,11 @@
 {
   "dependencies": {
+    "cors": "^2.8.5",
     "csv-parser": "^3.0.0",
     "express": "^4.21.1",
     "nodemon": "^3.1.7",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
     "server": "file:",
     "sqlite3": "^5.1.7"
   },
