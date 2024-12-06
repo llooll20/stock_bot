@@ -178,3 +178,22 @@ export const getData = () => {
 export const initialize = async () => {
   await InitDatabase();
 };
+
+// 유저 테이블 관리
+
+//유저 정보 입력(미완성)
+export const insertUserData = (id, password) => {
+  return new Promise((resolve, reject) => {
+    db.run(
+      "INSERT INTO user (id, password) VALUES ($id, $password)", 
+      { $id: id, $password: password },
+      function(err) {
+        if (err) {
+          reject("유저 정보 입력에 오류가 발생하였습니다.");
+        } else {
+          resolve("유저 정보를 입력하였습니다.");
+        }
+      }
+    );
+  });
+};
