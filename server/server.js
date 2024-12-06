@@ -1,11 +1,12 @@
 import express from "express";
 import cors from "cors";
-import { initialize, loadCSVData, getData } from "./db.js";
+import { initialize, loadCSVData, getData, insertUserData } from "./db.js";
 import db from "./lib/varDB.js";
 import passport from "passport";
 import { Strategy } from "passport-local";
 import session from "express-session";
 import bodyParser from "body-parser";
+import bcrypt from "bcrypt"; // 비밀번호 암호화
 
 const LocalStrategy = Strategy;
 
@@ -81,9 +82,16 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.post("/api/signup", (req, res) => {
-  console.log(`회원가입 페이지`, req.body);
-  res.send("GET signUP Page");
+// 회원가입 API
+app.post("/api/signup", async (req, res) => {
+  const { nickname, password } = req.body;
+
+  const hashPassword = await bcrypt.hash(password, 10);
+
+  // 사용자 계정 DB에 저장
+  insertUserData(nickname, hashPassword);
+
+  res.status(201).json({ message: "회원가입 성공!" });
 });
 
 // 로그인 API

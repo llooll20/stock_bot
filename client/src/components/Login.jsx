@@ -1,7 +1,7 @@
 import "./styles/Login.css";
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate();
@@ -71,6 +71,11 @@ function Login() {
           />
         </div>
         <button type="submit">로그인</button>
+        <div>
+          <Link to="/signup" className="register_button">
+            계정이 없으신가요?
+          </Link>
+        </div>
       </form>
     </div>
   );
