@@ -1,21 +1,44 @@
 import express from "express";
 import cors from "cors";
-import SQL from "sqlite3";
-import { initialize, loadCSVData, getData} from "./db.js";
+import { initialize, loadCSVData, getData } from "./db.js";
 import db from "./lib/varDB.js";
 import passport from "passport";
+import { Strategy } from "passport-local";
+import session from "express-session";
+import bodyParser from "body-parser";
+
+const LocalStrategy = Strategy;
 
 const app = express();
 const PORT = 5000;
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(express.json());
-app.use(passport.initialize());   //passport초기화
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+  session({
+    secure: false,
+    secret: "wegdf456@!!!@", // 무작위 암호화 키
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // HTTPS를 사용할 경우 true로 설정
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60, // 1시간
+    },
+  })
+);
+app.use(passport.initialize()); //passport초기화
+app.use(passport.session());
 
 //초기화 반복 방지
 let isInitialized = false;
 
 app.get("/", async (req, res) => {
-
   //초기화 확인
   if (isInitialized === false) {
     isInitialized = true;
@@ -58,15 +81,16 @@ app.get("/", async (req, res) => {
   }
 });
 
+// 로그인 API
+app.post("/api/login", (req, res) => {
+  console.log(req.body);
+
+  res.send("GET");
+});
+
 app.get("/login", (req, res) => {
   res.send("HOME");
 });
-
-//로그인 라우터 설정 authenticate가 passport.use 호출
-app.post('/login', passport.authenticate("local", {
-  successRedirect: "/",       //성공
-  failureRedirect: "/login",  //실패
-}));
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

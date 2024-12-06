@@ -22,13 +22,15 @@ function Login() {
     e.preventDefault();
     setError("");
     try {
-      //console.log(formData);
-
       const res = await axios.post(
         "http://localhost:5000/api/login",
         formData,
-        { withCredentials: true }
+        {
+          withCredentials: true,
+        }
       );
+      console.log(res.data);
+
       if (res.data.message === "로그인 성공!") {
         navigate("/chart");
       }
