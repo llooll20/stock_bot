@@ -6,7 +6,6 @@ import passport from "passport";
 import { Strategy } from "passport-local";
 import session from "express-session";
 import bodyParser from "body-parser";
-import bcrypt from "bcrypt"; // 비밀번호 암호화
 import { initializePassport } from "./passport_tool.js";
 
 const app = express();
@@ -85,51 +84,32 @@ app.get("/", async (req, res) => {
 // 회원가입 API
 app.post("/api/signup", async (req, res) => {
   const { nickname, password } = req.body;
-
-  const hashPassword = await bcrypt.hash(password, 10);
-
   // 사용자 계정 DB에 저장
-  insertUserData(nickname, hashPassword);
+  insertUserData(nickname, password);
 
-  res.status(201).json({ message: "회원가입 성공!" });
+  res.status(201).json({ message: "signup_success" });
 });
-
-/*
-// 로그인 API
-app.post("/api/login", (req, res) => {
-  console.log(req.body);
-
-  res.send("GET");
-});
-*/
 
 //로그인 passport를 이용한 로그인
-app.post('/api/login', (req, res, next) => {
+app.post("/api/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err);
     }
     if (!user) {
       console.log("로그인 실패 후:", req.user);
-      return res.redirect("/login"); // 로그인 실패 시 리디렉션
+      return res.status(500).json({ message: "login_fail" }); // 로그인 실패 시 500 return (http status)
     }
     req.login(user, (err) => {
       if (err) {
         return next(err);
       }
-      console.log("로그인 성공 후:", req.user);
-      console.log(res.status);
-      return res.redirect("/"); // 로그인 성공 후 리디렉션
+      //console.log("로그인 성공 후:", req.user);
+      return res.status(200).json({ message: "login_success" }); // 로그인 성공 후 200 return (http status)
     });
   })(req, res, next);
-});
-
-
-app.get("/login", (req, res) => {
-  res.send("HOME");
 });
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-

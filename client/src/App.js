@@ -12,7 +12,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* 백엔드 기능 완성시 element 수정 예정 */}
-          <Route path="/" element={<Chart />}></Route>
+          <Route path="/" element={<Login />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/chart" element={<Chart />}></Route>

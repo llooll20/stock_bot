@@ -43,8 +43,10 @@ function SignUp() {
         { withCredentials: true }
       );
 
-      setSuccess(res.data.message);
-      navigate("/login"); // login으로 이동
+      setSuccess(res.data.message === "signup_success");
+      if (res.data.message === "signup_success") {
+        navigate("/login"); // login으로 이동
+      }
     } catch (error) {
       if (
         error.response &&

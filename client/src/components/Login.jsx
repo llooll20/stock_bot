@@ -29,13 +29,12 @@ function Login() {
           withCredentials: true,
         }
       );
-      console.log(res.data);
 
-      if (res.data.message === "로그인 성공!") {
+      if (res.data.message === "login_success") {
         navigate("/chart");
       }
     } catch (error) {
-      if (
+      /* if (
         error.response &&
         error.response.data &&
         error.response.data.message
@@ -43,12 +42,13 @@ function Login() {
         setError(error.response.data.message);
       } else {
         setError("로그인 중 오류가 발생");
-      }
+      } */
+      alert("login fail");
     }
   };
   return (
     <div className="login_container">
-      {error && <p className="error">{error}</p>}
+      {/* {error && <p className="error">{error}</p>} */}
       <form className="loginForm_container" onSubmit={handleSubmit}>
         <div>
           <input
