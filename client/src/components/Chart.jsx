@@ -8,8 +8,9 @@ const Chart = ({ theme }) => {
   const getChartData = async () => {
     const json = await (await fetch("http://localhost:5000/")).json();
     const result = json.splice(1);
+    const default_ONEYEAR_DATA = result.splice(0, 246);
 
-    setChartData(result);
+    setChartData(default_ONEYEAR_DATA);
     setLoading(false);
   };
   useEffect(() => {
