@@ -1,4 +1,3 @@
-import Chart from "./components/Chart";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NotFound from "./components/NotFound";
 import Login from "./components/Login";
@@ -7,6 +6,7 @@ import { useState, useEffect } from "react";
 import Layout from "./Layout";
 
 import "./App.css";
+import DashBoard from "./components/DashBoard";
 
 function App() {
   const [theme, setTheme] = useState("light");
@@ -30,7 +30,7 @@ function App() {
             <Route path="/" element={<Login />}></Route>
             <Route path="/signup" element={<SignUp />}></Route>
             <Route path="/login" element={<Login />}></Route>
-            <Route path="/chart" element={<Chart theme={theme} />}></Route>
+            <Route path="/chart" element={<DashBoard theme={theme} />}></Route>
             {/* 상단에 위치하는 라우트들의 규칙을 모두 확인, 일치하는 라우트가 없는경우 처리 */}
             <Route path="*" element={<NotFound />}></Route>
           </Route>
