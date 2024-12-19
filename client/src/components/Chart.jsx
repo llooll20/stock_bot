@@ -1,12 +1,14 @@
 import ApexChart from "react-apexcharts";
 import { useEffect, useState } from "react";
 
-const Chart = () => {
+const Chart = ({ theme }) => {
   const [chartData, setChartData] = useState([]);
   const [isLoading, setLoading] = useState(true);
+
   const getChartData = async () => {
     const json = await (await fetch("http://localhost:5000/")).json();
     const result = json.splice(1);
+
     setChartData(result);
     setLoading(false);
   };
@@ -25,22 +27,27 @@ const Chart = () => {
           data: chartData.map((item) => {
             return [
               item.date,
+              Number(item.opening_price.split(",").join("")),
               Number(item.high_price.split(",").join("")),
               Number(item.low_price.split(",").join("")),
-              Number(item.opening_price.split(",").join("")),
               Number(item.closing_price.split(",").join("")),
             ];
           }),
         },
       ]}
       options={{
-        theme: { mode: "dark" },
+        theme: {
+          mode: theme,
+        },
         chart: {
           toolbar: { show: true },
           background: "transparent",
         },
         stroke: { curve: "smooth", width: 1 },
-        grid: { show: true },
+        grid: {
+          show: true,
+          borderColor: theme === "light" ? "black" : "white",
+        },
         yaxis: { show: true },
         xaxis: {
           labels: {
@@ -48,9 +55,15 @@ const Chart = () => {
             datetimeFormatter: {
               day: "yyyy.MM.dd",
             },
+            axisBorder: {
+              color: "black",
+            },
           },
           axisTicks: { show: true },
-          axisBorder: { show: true },
+          axisBorder: {
+            show: true,
+            color: theme === "light" ? "black" : "white",
+          },
           type: "datetime",
         },
       }}
