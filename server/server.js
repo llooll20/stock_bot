@@ -1,6 +1,12 @@
 import express from "express";
 import cors from "cors";
-import { initialize, loadCSVData, getData, insertUserData, insertScrapData } from "./db.js";
+import {
+  initialize,
+  loadCSVData,
+  getData,
+  insertUserData,
+  insertScrapData,
+} from "./db.js";
 import db from "./lib/varDB.js";
 import passport from "passport";
 import { Strategy } from "passport-local";
@@ -35,58 +41,40 @@ app.use(
 );
 
 app.use(passport.initialize()); //passport초기화
-app.use(passport.session());    //passport 세션 연결
+app.use(passport.session()); //passport 세션 연결
 
-initializePassport(passport);   //초기화 실행
+initializePassport(passport); //초기화 실행
 //초기화 반복 방지
-let isInitialized = false;
 
-app.get("/chart", async (req, res) => {
-  //초기화 확인
-  if (isInitialized === false) {
-    isInitialized = true;
-    initialize()
-      .then(() => {
-        console.log("데이터베이스가 초기화되었습니다.");
-      })
-      .catch((err) => {
-        console.error("데이터베이스 초기화 실패:", err);
-        process.exit(1);
-      });
-  }
-
-  //포폴 데이터 삽입 실험용 더미 코드
-  insertScrapData("aa","2019-12-11","2020-11-08","첫번째 코멘트");
-
+const SetUpTable = async () => {
   try {
+    await initialize();
+    console.log("데이터베이스가 초기화되었습니다.");
+
     const countResult = await new Promise((resolve, reject) => {
       db.get("SELECT COUNT(*) as count FROM stock_data", (err, row) => {
         if (err) {
-          reject(err);
-        } else {
-          resolve(row);
+          return reject(err);
         }
+        resolve(row);
       });
     });
+
     if (countResult.count === 0) {
-      // CSV 파일 읽기 및 DB에 저장
       try {
-        const data = await loadCSVData();
-        res.json(data);
+        await loadCSVData();
       } catch (error) {
         console.error("CSV 데이터 로드 실패:", error);
-        res.status(500).send("CSV 파일 읽기 에러");
       }
-    } else {
-      // DB에서 데이터 조회
-      const data = await getData();
-      res.json(data);
     }
-  } catch (e) {
-    console.log(`데이터 없음`);
+  } catch (err) {
+    console.error("데이터베이스 초기화 실패:", err);
+    process.exit(1);
   }
-});
+};
+SetUpTable();
 
+app.get("/", async (req, res) => {});
 
 // 회원가입 API
 app.post("/api/signup", async (req, res) => {
