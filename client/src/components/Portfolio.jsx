@@ -9,21 +9,6 @@ function Portfolio() {
   const [comment, setComment] = useState("");
   const [currentPortfolioData, setPortfolioData] = useState([]);
 
-  const dummy = [
-    {
-      id: 1734602747478,
-      startDate: "2024-12-05",
-      endDate: "2024-12-06",
-      comment: "1",
-    },
-    {
-      id: 1734602760901,
-      startDate: "2024-12-20",
-      endDate: "2024-12-27",
-      comment: "213",
-    },
-  ];
-
   const handleAddPortfolio = () => {
     console.log("Click");
     const newPortfolio = {
@@ -33,7 +18,6 @@ function Portfolio() {
       comment,
     };
     setPortfolioData((prev) => [...prev, newPortfolio]);
-    console.log(currentPortfolioData);
 
     setStartDate("");
     setEndDate("");
@@ -48,11 +32,11 @@ function Portfolio() {
   return (
     <div className="portfolio_container">
       <ul>
-        {dummy.map((data) => {
+        {currentPortfolioData.map((data) => (
           <li key={data.id}>
             <Card data={data} />
-          </li>;
-        })}
+          </li>
+        ))}
       </ul>
       {!showInput && (
         <button className="outline" onClick={handlePortfolio}>

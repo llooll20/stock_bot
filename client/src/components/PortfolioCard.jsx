@@ -1,9 +1,10 @@
+import ChartCard from "./ChartCard";
+
 function PortfolioCard({ data }) {
   return (
     <>
+      <ChartCard startDate={data.startDate} endDate={data.endDate} />
       <strong>{data.comment}</strong>
-      <div>시작일: {data.startDate}</div>
-      <div>종료일: {data.endDate}</div>
     </>
   );
 }
