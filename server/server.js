@@ -38,7 +38,7 @@ initializePassport(passport);
 //초기화 반복 방지
 let isInitialized = false;
 
-app.get("/", async (req, res) => {
+app.get("/chart", async (req, res) => {
   //초기화 확인
   if (isInitialized === false) {
     isInitialized = true;
