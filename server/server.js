@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { initialize, loadCSVData, getData, insertUserData } from "./db.js";
+import { initialize, loadCSVData, getData, insertUserData, insertScrapData } from "./db.js";
 import db from "./lib/varDB.js";
 import passport from "passport";
 import { Strategy } from "passport-local";
@@ -18,6 +18,8 @@ app.use(
 );
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//세션 생성
 app.use(
   session({
     secure: false,
@@ -31,10 +33,11 @@ app.use(
     },
   })
 );
-app.use(passport.initialize()); //passport초기화
-app.use(passport.session());
 
-initializePassport(passport);
+app.use(passport.initialize()); //passport초기화
+app.use(passport.session());    //passport 세션 연결
+
+initializePassport(passport);   //초기화 실행
 //초기화 반복 방지
 let isInitialized = false;
 
@@ -51,6 +54,9 @@ app.get("/", async (req, res) => {
         process.exit(1);
       });
   }
+
+  //포폴 데이터 삽입 실험용 더미 코드
+  insertScrapData("aa","2019-12-11","2020-11-08","첫번째 코멘트");
 
   try {
     const countResult = await new Promise((resolve, reject) => {
@@ -81,12 +87,12 @@ app.get("/", async (req, res) => {
   }
 });
 
+
 // 회원가입 API
 app.post("/api/signup", async (req, res) => {
   const { nickname, password } = req.body;
   // 사용자 계정 DB에 저장
   insertUserData(nickname, password);
-
   res.status(201).json({ message: "signup_success" });
 });
 

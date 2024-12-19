@@ -53,8 +53,32 @@ export const InitDatabase = () => {
       }
     )
   });
-  
-  return Promise.all([createStockTable, createUserTable]);
+
+  //스크랩 데이터베이스 초기화
+  const createScrapTable = new Promise((resolve, reject) => {
+    db.run(
+      `
+      CREATE TABLE IF NOT EXISTS scrap(
+        id TEXT NOT NULL,
+        start TEXT NULL,
+        end TEXT NULL,
+        comment TEXT NULL
+      )
+      `,
+      (err) => {
+        if(err){
+          console.log("스크랩 테이블 생성 실패", err.message);
+          reject(err);
+        } else{
+          console.log("스크랩 테이블 생성 성공");
+          resolve();
+        }
+      }
+    )
+  });
+
+
+  return Promise.all([createStockTable, createUserTable, createScrapTable]);
 };
 
 // 데이터 삽입 함수
@@ -207,3 +231,36 @@ export const insertUserData = (id, password) => {
     });
   });
 };
+
+//스크랩 데이터베이스 관련코드드
+
+//스크랩 데이터베이스에 값 입력
+export const insertScrapData = (id, start, end, comment) => {
+  return new Promise ((resolve, reject) => {
+    const stmt = db.prepare(
+      `
+      INSERT INTO scrap
+      (id, start, end, comment)
+      VALUES (?,?,?,?)
+      `
+    );
+    stmt.run(id, start, end, comment, function(err) {
+      if (err) {
+        console.err("스크랩 데이터 삽입 오류:", err.message);
+        reject(err);
+      } else{
+        console.log("스크랩 데이터 삽입 성공");
+        resolve();
+      }
+    })
+    stmt.finalize((err) => {
+      if (err) {
+        console.error("Prepared Statement 종료 오류:", err.message);
+      }
+    });
+  });
+};
+
+//스크랩 데이터베이스에서 특정사용자의 시작, 끝값 모두 가져오기
+
+//스크랩 데이터베이스에서 값 삭제하기g
