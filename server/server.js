@@ -74,7 +74,10 @@ const SetUpTable = async () => {
 };
 SetUpTable();
 
-app.get("/", async (req, res) => {});
+app.get("/", async (req, res) => {
+  const chartData = await getData();
+  res.json(chartData);
+});
 
 // 회원가입 API
 app.post("/api/signup", async (req, res) => {
