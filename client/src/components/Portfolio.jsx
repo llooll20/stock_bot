@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Card from "./PortfolioCard";
+import axios from "axios";
 import "./styles/Portfolio.css";
 
 function Portfolio() {
@@ -9,14 +10,25 @@ function Portfolio() {
   const [comment, setComment] = useState("");
   const [currentPortfolioData, setPortfolioData] = useState([]);
 
+  const START_DATE = "2021-01-04";
+  const END_DATE = "2024-05-01";
+
+  // startDate로부터 1개월 뒤 날짜 계산 함수
+  const getDate = (currentDate) => {
+    if (!currentDate) return "";
+    const date = new Date(currentDate);
+    date.setMonth(date.getMonth() + 1); // 한달 후
+    return date.toISOString().slice(0, 10); // YYYY-MM-DD
+  };
+
   const handleAddPortfolio = () => {
-    console.log("Click");
     const newPortfolio = {
       id: Date.now(),
       startDate,
       endDate,
       comment,
     };
+    /* post to server */
     setPortfolioData((prev) => [...prev, newPortfolio]);
 
     setStartDate("");
@@ -49,6 +61,7 @@ function Portfolio() {
             <input
               type="date"
               value={startDate}
+              min={START_DATE}
               onChange={(e) => setStartDate(e.target.value)}
             />
           </div>
@@ -56,6 +69,8 @@ function Portfolio() {
             <input
               type="date"
               value={endDate}
+              min={startDate || START_DATE}
+              max={startDate ? getDate(startDate) : END_DATE}
               onChange={(e) => setEndDate(e.target.value)}
             />
           </div>
