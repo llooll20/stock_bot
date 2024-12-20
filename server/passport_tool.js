@@ -36,7 +36,7 @@ export const initializePassport = (passport) => {
   });
 
   passport.deserializeUser((id, done) => {
-    db.get("SELECT * FROM user WHERE name = ?", [id], (err, row) => {
+    db.get("SELECT * FROM user WHERE id = ?", [id], (err, row) => {
       if (err) {
         return done(err);
       }

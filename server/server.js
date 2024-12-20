@@ -7,6 +7,7 @@ import {
   insertUserData,
   insertPortfolioData,
   getDateSector,
+  getAllUserPortfolio
 } from "./db.js";
 import db from "./lib/varDB.js";
 import passport from "passport";
@@ -107,6 +108,20 @@ app.get("/api/range_chart", (req, res) => {
     .catch((err) => {
       res.status(500).json({ message: "fetch error" });
     });
+});
+
+//임시 사용자의 포트폴리오 받는 코드
+app.get("/api/user", (req, res) => {
+  if (req.isAuthenticated()) { // 사용자가 인증된 상태인지 확인
+    res.status(200).json({ user: req.user });
+    getAllUserPortfolio(req.user.id)
+    .then(rows => {
+      console.log("포폴: ",rows);
+    })
+
+  } else {
+    res.status(401).json({ message: "Not authenticated" });
+  }
 });
 
 // 회원가입 API
