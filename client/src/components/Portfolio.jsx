@@ -21,7 +21,6 @@ function Portfolio() {
   const fetchPortfolio = async () => {
     try {
       const res = await Fetcher.get("http://localhost:5000/api/portfolio");
-
       setCurrentPortfolio(res.data);
     } catch (error) {
       console.error("포트폴리오 데이터를 가져오는 중 오류 발생:", error);
@@ -55,7 +54,7 @@ function Portfolio() {
         },
         { withCredentials: true }
       );
-      console.log(res.data.message);
+      fetchPortfolio();
     } catch (error) {
       console.log(`post Error`);
     }
@@ -79,6 +78,7 @@ function Portfolio() {
       setCurrentPortfolio((prevPortfolio) =>
         prevPortfolio.filter((portfolio) => portfolio.id !== selectId)
       );
+      fetchPortfolio();
     } catch (error) {
       console.error(`포트폴리오 삭제 도중 오류 발생`, error);
     }

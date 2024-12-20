@@ -29,13 +29,12 @@ export const InitDatabase = () => {
           console.log("stock 테이블이 생성되었습니다.");
           resolve();
         }
-      }    
+      }
     );
-  }
-);
+  });
   //유저 테이블 초기화
-  const createUserTable = new Promise((resolve, reject)=> {
-  db.run(
+  const createUserTable = new Promise((resolve, reject) => {
+    db.run(
       `
       CREATE TABLE IF NOT EXISTS user(
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,12 +46,12 @@ export const InitDatabase = () => {
         if (err) {
           console.error("테이블 생성 실패:", err.message);
           reject(err);
-        } else{
+        } else {
           console.log("user 테이블이 생성되었습니다.");
-            resolve();
+          resolve();
         }
       }
-    )
+    );
   });
 
   //포폴 데이터베이스 초기화
@@ -68,17 +67,16 @@ export const InitDatabase = () => {
       )
       `,
       (err) => {
-        if(err){
+        if (err) {
           console.log("포폴 테이블 생성 실패", err.message);
           reject(err);
-        } else{
+        } else {
           console.log("포폴 테이블 생성 성공");
           resolve();
         }
       }
-    )
+    );
   });
-
 
   return Promise.all([createStockTable, createUserTable, createportfolioTable]);
 };
@@ -205,15 +203,19 @@ export const initialize = async () => {
 //차트 테이블 구간 내 모든 정보 가져오기
 export const getDateSector = (start, end) => {
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM stock_data WHERE date BETWEEN ? AND ?", [start, end], (err, rows) => {
-      if (err) {
-        console.error(err);
-        reject(err);
-      } else{
-        console.log("구간 정보 가져오기 성공");
-        resolve(rows);
+    db.all(
+      "SELECT * FROM stock_data WHERE date BETWEEN ? AND ?",
+      [start, end],
+      (err, rows) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          console.log("구간 정보 가져오기 성공");
+          resolve(rows);
+        }
       }
-    });
+    );
   });
 };
 
@@ -257,7 +259,7 @@ export const insertUserData = (nickname, password) => {
 
 //포폴폴 데이터베이스에 값 입력
 export const insertPortfolioData = (id, start, end, comment) => {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const stmt = db.prepare(
       `
       INSERT INTO portfolio
@@ -265,15 +267,15 @@ export const insertPortfolioData = (id, start, end, comment) => {
       VALUES (?,?,?,?)
       `
     );
-    stmt.run(id, start, end, comment, function(err) {
+    stmt.run(id, start, end, comment, function (err) {
       if (err) {
         console.err("포폴 데이터 삽입 오류:", err.message);
         reject(err);
-      } else{
+      } else {
         console.log("포폴 데이터 삽입 성공");
         resolve();
       }
-    })
+    });
     stmt.finalize((err) => {
       if (err) {
         console.error("Prepared Statement 종료 오류:", err.message);
@@ -284,63 +286,66 @@ export const insertPortfolioData = (id, start, end, comment) => {
 
 //포폴 데이터베이스에서 특정사용자의 시작, 끝값 모두 가져오기 (리스트 형태)
 export const getAllUserPortfolio = (id) => {
-  return new Promise ((resolve, reject) => {
-    db.all("SELECT start, end, comment FROM portfolio WHERE owner = ?",[id],(err, rows) => {
-      if (err) {
-        console.error(err);
-        reject(err);
-      } else {
-        console.log(id ," 사용자의 포폴데이터 추출 성공!");
-        resolve(rows);
+  return new Promise((resolve, reject) => {
+    db.all(
+      "SELECT start, end, comment FROM portfolio WHERE owner = ?",
+      [id],
+      (err, rows) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          console.log(id, " 사용자의 포폴데이터 추출 성공!");
+          resolve(rows);
+        }
       }
-    });
+    );
   });
-}
+};
 
 //포폴 데이터베이스에서 삭제할 값 포폴 테이블 id 찾기
-export const  delPortfolio = (owner,id) => {
-  return new Promise ((resolve, reject ) => {
+export const delPortfolio = (owner, id) => {
+  return new Promise((resolve, reject) => {
     const temp = [];
-    let result=0;
-    console.log(owner," ",id);
-    const stmt= db.prepare(
+    let result = 0;
+    console.log(owner, " ", id);
+    const stmt = db.prepare(
       `
       SELECT * FROM portfolio WHERE owner = ?
       `
     );
-    stmt.all(owner, function(err, rows){
-      if(err) {
+    stmt.all(owner, function (err, rows) {
+      if (err) {
         console.error(err);
         reject(err);
       } else {
         console.log("포폴 데이터 가져오기 성공");
 
-        rows.forEach(row => {
+        rows.forEach((row) => {
           temp.push(row);
         });
       }
-      result=temp[id-1].id;
+      result = temp[id - 1].id;
       resolve(result);
-    })
+    });
   });
-}
+};
 //id기준으로 포폴데이터 삭제
-export const  sub_delPortfolio = (id) => {
-  return new Promise ((resolve, reject ) => {
-    console.log(id);
-    const stmt= db.prepare(
+export const sub_delPortfolio = (id) => {
+  return new Promise((resolve, reject) => {
+    const stmt = db.prepare(
       `
       DELETE FROM portfolio WHERE id = ?
       `
     );
-    stmt.run(id, function(err) {
-      if(err) {
+    stmt.run(id, function (err) {
+      if (err) {
         console.error(err);
         reject(err);
       } else {
         console.log("포폴 삭제 성공");
         resolve();
       }
-    })
+    });
   });
-}
+};
