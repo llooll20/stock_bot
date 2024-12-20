@@ -6,6 +6,7 @@ import {
   getData,
   insertUserData,
   insertPortfolioData,
+  getDateSector,
 } from "./db.js";
 import db from "./lib/varDB.js";
 import passport from "passport";
@@ -50,7 +51,15 @@ const SetUpTable = async () => {
   try {
     await initialize();
     console.log("데이터베이스가 초기화되었습니다.");
-    insertPortfolioData(1,"2012","2013","하하하핳");
+
+    //새로 추가된 부분 구간 데이터 가져오기 !!!!!!!!!!!!!!!!!!!!!!!!
+    getDateSector("2024-03-01","2024-05-01")
+    .then(rows => {
+      console.log("조회된 데이터:", rows);
+    })
+    .catch(err => {
+      console.err("조회실패:", err);
+    })
 
     const countResult = await new Promise((resolve, reject) => {
       db.get("SELECT COUNT(*) as count FROM stock_data", (err, row) => {
