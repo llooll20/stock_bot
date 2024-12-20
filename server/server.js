@@ -7,6 +7,7 @@ import {
   insertUserData,
   insertPortfolioData,
   getDateSector,
+  getAllUserPortfolio,
 } from "./db.js";
 import db from "./lib/varDB.js";
 import passport from "passport";
@@ -52,15 +53,6 @@ const SetUpTable = async () => {
     await initialize();
     console.log("데이터베이스가 초기화되었습니다.");
 
-    //새로 추가된 부분 구간 데이터 가져오기 !!!!!!!!!!!!!!!!!!!!!!!!
-    getDateSector("2024-03-01","2024-05-01")
-    .then(rows => {
-      console.log("조회된 데이터:", rows);
-    })
-    .catch(err => {
-      console.err("조회실패:", err);
-    })
-
     const countResult = await new Promise((resolve, reject) => {
       db.get("SELECT COUNT(*) as count FROM stock_data", (err, row) => {
         if (err) {
@@ -83,6 +75,20 @@ const SetUpTable = async () => {
   }
 };
 SetUpTable();
+
+//임시 사용자의 포트폴리오 받는 코드
+app.get("/api/user", (req, res) => {
+  if (req.isAuthenticated()) { // 사용자가 인증된 상태인지 확인
+    res.status(200).json({ user: req.user });
+    getAllUserPortfolio(req.user.id)
+    .then(rows => {
+      console.log("포폴: ",rows);
+    })
+
+  } else {
+    res.status(401).json({ message: "Not authenticated" });
+  }
+});
 
 app.get("/", async (req, res) => {
   const chartData = await getData();
@@ -116,6 +122,7 @@ app.post("/api/login", (req, res, next) => {
     });
   })(req, res, next);
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

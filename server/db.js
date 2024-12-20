@@ -222,7 +222,7 @@ export const getDateSector = (start, end) => {
 */
 
 //유저 정보 입력(미완성)
-export const insertUserData = (id, password) => {
+export const insertUserData = (nickname, password) => {
   return new Promise((resolve, reject) => {
     const stmt = db.prepare(
       `
@@ -233,7 +233,7 @@ export const insertUserData = (id, password) => {
     );
 
     // sql 실행
-    stmt.run(id, password, function (err) {
+    stmt.run(nickname, password, function (err) {
       if (err) {
         console.error("데이터 삽입 오류:", err.message);
         reject(err);
@@ -283,5 +283,18 @@ export const insertPortfolioData = (id, start, end, comment) => {
 };
 
 //포폴 데이터베이스에서 특정사용자의 시작, 끝값 모두 가져오기 (리스트 형태)
+export const getAllUserPortfolio = (id) => {
+  return new Promise ((resolve, reject) => {
+    db.all("SELECT start, end FROM portfolio WHERE owner = ?",[id],(err, rows) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        console.log(id ," 사용자의 포폴데이터 추출 성공!");
+        resolve(rows);
+      }
+    });
+  });
+}
 
 //포폴 데이터베이스에서 값 삭제하기
