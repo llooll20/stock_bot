@@ -297,8 +297,35 @@ export const getAllUserPortfolio = (id) => {
   });
 }
 
-//포폴 데이터베이스에서 값 삭제하기
-export const  delPortfolio = (id) => {
+//포폴 데이터베이스에서 삭제할 값 포폴 테이블 id 찾기
+export const  delPortfolio = (owner,id) => {
+  return new Promise ((resolve, reject ) => {
+    const temp = [];
+    let result=0;
+    console.log(owner," ",id);
+    const stmt= db.prepare(
+      `
+      SELECT * FROM portfolio WHERE owner = ?
+      `
+    );
+    stmt.all(owner, function(err, rows){
+      if(err) {
+        console.error(err);
+        reject(err);
+      } else {
+        console.log("포폴 데이터 가져오기 성공");
+
+        rows.forEach(row => {
+          temp.push(row);
+        });
+      }
+      result=temp[id-1].id;
+      resolve(result);
+    })
+  });
+}
+//id기준으로 포폴데이터 삭제
+export const  sub_delPortfolio = (id) => {
   return new Promise ((resolve, reject ) => {
     console.log(id);
     const stmt= db.prepare(
