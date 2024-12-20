@@ -87,12 +87,11 @@ app.post("/api/upadte_portfolio", (req, res) => {
   res.status(201).json({ message: "update portfolio success" });
 });
 
-
 //포폴 삭제
-app.delete("/api/delete_portfolio", (req,res) =>{
+app.delete("/api/delete_portfolio/:id", (req, res) => {
   console.log(req.params.id);
   delPortfolio(req.params.id);
-  res.send('success to del');
+  res.send("success to del");
 });
 
 // 구간 차트 API
