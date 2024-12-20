@@ -8,6 +8,7 @@ import {
   insertPortfolioData,
   getDateSector,
   getAllUserPortfolio,
+  delPortfolio,
 } from "./db.js";
 import db from "./lib/varDB.js";
 import passport from "passport";
@@ -84,6 +85,14 @@ app.post("/api/upadte_portfolio", (req, res) => {
   const { startDate, endDate, comment } = req.body;
   insertPortfolioData(req.user.id, startDate, endDate, comment);
   res.status(201).json({ message: "update portfolio success" });
+});
+
+
+//포폴 삭제
+app.delete("/api/delete_portfolio", (req,res) =>{
+  console.log(req.params.id);
+  delPortfolio(req.params.id);
+  res.send('success to del');
 });
 
 // 구간 차트 API
