@@ -11,7 +11,7 @@ export const initializePassport = (passport) => {
       (username, password, done) => {
         console.log("LocalStrategy 등록 완료");
 
-        db.get("SELECT * FROM user WHERE id = ?", [username], (err, row) => {
+        db.get("SELECT * FROM user WHERE name = ?", [username], (err, row) => {
           if (err) {
             return done(err);
           }
@@ -36,7 +36,7 @@ export const initializePassport = (passport) => {
   });
 
   passport.deserializeUser((id, done) => {
-    db.get("SELECT * FROM user WHERE id = ?", [id], (err, row) => {
+    db.get("SELECT * FROM user WHERE name = ?", [id], (err, row) => {
       if (err) {
         return done(err);
       }
