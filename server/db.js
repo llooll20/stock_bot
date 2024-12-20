@@ -202,7 +202,24 @@ export const initialize = async () => {
   await InitDatabase();
 };
 
-// 유저 테이블 관리
+//차트 테이블 구간 내 모든 정보 가져오기
+export const getDateSector = (start, end) => {
+  return new Promise((resolve, reject) => {
+    db.all("SELECT * FROM stock_data WHERE date BETWEEN ? AND ?", [start, end], (err, rows) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else{
+        console.log("구간 정보 가져오기 성공");
+        resolve(rows);
+      }
+    });
+  });
+};
+
+/*
+    유저 테이블 관련 함수
+*/
 
 //유저 정보 입력(미완성)
 export const insertUserData = (id, password) => {
@@ -234,7 +251,9 @@ export const insertUserData = (id, password) => {
   });
 };
 
-//포폴 데이터베이스 관련코드드
+/*
+    포폴 데이터베이스 관련코드들들
+*/
 
 //포폴폴 데이터베이스에 값 입력
 export const insertPortfolioData = (id, start, end, comment) => {
