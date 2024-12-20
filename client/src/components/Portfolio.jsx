@@ -107,7 +107,7 @@ function Portfolio() {
           <div>
             <input
               type="text"
-              placeholder=""
+              placeholder="포트폴리오에 대한 한줄 코멘트를 입력하세요"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />

@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 function ChartCard({ startDate, endDate }) {
-  console.log(startDate, endDate);
-
   const [chartData, setChartData] = useState([]);
   useEffect(() => {
     fetchChartData();
@@ -17,7 +15,6 @@ function ChartCard({ startDate, endDate }) {
           endDate,
         },
       });
-      console.log(res.data);
 
       setChartData(res.data);
     } catch (error) {
@@ -27,7 +24,8 @@ function ChartCard({ startDate, endDate }) {
   return (
     <ApexChart
       type="candlestick"
-      height="500"
+      height="400"
+      width="400"
       series={[
         {
           data: chartData.map((item) => {
@@ -46,13 +44,13 @@ function ChartCard({ startDate, endDate }) {
           mode: "dark",
         },
         chart: {
-          toolbar: { show: true },
+          toolbar: { show: false },
           background: "transparent",
         },
         stroke: { curve: "smooth", width: 1 },
         grid: {
           show: true,
-          borderColor: /* theme === "light" ? "black" : "white" */ "black",
+          borderColor: "black",
         },
         yaxis: { show: true },
         xaxis: {
@@ -68,7 +66,7 @@ function ChartCard({ startDate, endDate }) {
           axisTicks: { show: true },
           axisBorder: {
             show: true,
-            color: /* theme === "light" ? "black" : "white" */ "black",
+            color: "black",
           },
           type: "datetime",
         },

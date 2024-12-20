@@ -82,7 +82,13 @@ app.get("/", async (req, res) => {
 });
 
 // 포트폴리오 정보 가져오는 API
-app.get("/api/portfolio", (req, res) => {});
+app.get("/api/portfolio", (req, res) => {
+  try {
+  } catch (error) {
+    console.error(`포트폴리오 정보를 가져올 수 없음.`);
+    res.status(500).json({ message: `포트폴리오 정보를 가져올 수 없음.` });
+  }
+});
 
 // 포트폴리오 추가 API
 app.post("/api/upadte_portfolio", (req, res) => {
@@ -125,7 +131,6 @@ app.post("/api/login", (req, res, next) => {
       if (err) {
         return next(err);
       }
-      //console.log("로그인 성공 후:", req.user);
       return res.status(200).json({ message: "login_success" }); // 로그인 성공 후 200 return (http status)
     });
   })(req, res, next);
