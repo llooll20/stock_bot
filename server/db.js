@@ -298,3 +298,22 @@ export const getAllUserPortfolio = (id) => {
 }
 
 //포폴 데이터베이스에서 값 삭제하기
+
+export const  delPortfolio = (id) => {
+  return new Promise ((resolve, reject ) => {
+    const stmt= db.prepare(
+      `
+      DELETE FROM portfolio WHERE id = ?
+      `
+    );
+    stmt.run(id, function(err) {
+      if(err) {
+        console.error(err);
+        reject(err);
+      } else {
+        console.log("포폴 삭제 성공");
+        resolve();
+      }
+    })
+  });
+}

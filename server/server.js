@@ -8,6 +8,7 @@ import {
   insertPortfolioData,
   getDateSector,
   getAllUserPortfolio,
+  delPortfolio,
 } from "./db.js";
 import db from "./lib/varDB.js";
 import passport from "passport";
@@ -50,6 +51,7 @@ initializePassport(passport); //초기화 실행
 const SetUpTable = async () => {
   try {
     await initialize();
+    delPortfolio(18);
 
     const countResult = await new Promise((resolve, reject) => {
       db.get("SELECT COUNT(*) as count FROM stock_data", (err, row) => {
@@ -109,6 +111,12 @@ app.get("/api/portfolio", (req, res) => {
   } else {
     res.status(401).json({ message: "Not authenticated" });
   }
+});
+
+//임시 포폴삭제 코드
+app.delete("/del",(req, res)=>{
+      console.log("삭제시작");
+      res.send('success to del');
 });
 
 // 회원가입 API

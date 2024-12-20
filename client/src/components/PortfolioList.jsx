@@ -8,6 +8,17 @@ const PortfolioList = () => {
     fetchPortfolio();
   }, []);
 
+  const deletePortfolio = async () => {
+    fetch('http://localhost:5000/del', { // 요청을 보낼 서버의 URL
+      method: 'DELETE',                // HTTP DELETE 메서드를 사용
+      headers: {                       // 요청 헤더에 인증 정보 추가
+        Authorization: localStorage.getItem('access_token'), // 토큰을 헤더에 추가
+      },
+      body: JSON.stringify({           // 요청 본문에 삭제할 데이터의 ID 포함
+        cart_id: data.cart_id,         // 삭제할 데이터의 cart_id
+      }),
+    })
+  }
   const fetchPortfolio = async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/portfolio");
