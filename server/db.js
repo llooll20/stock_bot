@@ -285,7 +285,7 @@ export const insertPortfolioData = (id, start, end, comment) => {
 //포폴 데이터베이스에서 특정사용자의 시작, 끝값 모두 가져오기 (리스트 형태)
 export const getAllUserPortfolio = (id) => {
   return new Promise ((resolve, reject) => {
-    db.all("SELECT start, end FROM portfolio WHERE owner = ?",[id],(err, rows) => {
+    db.all("SELECT start, end, comment FROM portfolio WHERE owner = ?",[id],(err, rows) => {
       if (err) {
         console.error(err);
         reject(err);
