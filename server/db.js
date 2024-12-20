@@ -297,7 +297,7 @@ export const getAllUserPortfolio = (id) => {
   });
 }
 
-//포폴 데이터베이스에서 값 삭제하기
+//포폴 데이터베이스에서 삭제할 값 포폴 테이블 id 찾기
 export const  delPortfolio = (owner,id) => {
   return new Promise ((resolve, reject ) => {
     const temp = [];
@@ -324,6 +324,7 @@ export const  delPortfolio = (owner,id) => {
     })
   });
 }
+//id기준으로 포폴데이터 삭제
 export const  sub_delPortfolio = (id) => {
   return new Promise ((resolve, reject ) => {
     console.log(id);
