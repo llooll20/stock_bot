@@ -38,7 +38,8 @@ export const InitDatabase = () => {
   db.run(
       `
       CREATE TABLE IF NOT EXISTS user(
-          id TEXT NOT NULL PRIMARY KEY,
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
           password TEXT NOT NULL
       )
       `,
@@ -59,7 +60,8 @@ export const InitDatabase = () => {
     db.run(
       `
       CREATE TABLE IF NOT EXISTS scrap(
-        id TEXT NOT NULL,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        owner TEXT NOT NULL,
         start TEXT NULL,
         end TEXT NULL,
         comment TEXT NULL
@@ -208,7 +210,7 @@ export const insertUserData = (id, password) => {
     const stmt = db.prepare(
       `
       INSERT INTO user
-      (id, password) 
+      (name, password) 
       VALUES (?, ?)
     `
     );
@@ -240,7 +242,7 @@ export const insertScrapData = (id, start, end, comment) => {
     const stmt = db.prepare(
       `
       INSERT INTO scrap
-      (id, start, end, comment)
+      (owner, start, end, comment)
       VALUES (?,?,?,?)
       `
     );
@@ -261,6 +263,6 @@ export const insertScrapData = (id, start, end, comment) => {
   });
 };
 
-//스크랩 데이터베이스에서 특정사용자의 시작, 끝값 모두 가져오기
+//스크랩 데이터베이스에서 특정사용자의 시작, 끝값 모두 가져오기 (리스트 형태)
 
-//스크랩 데이터베이스에서 값 삭제하기g
+//스크랩 데이터베이스에서 값 삭제하기
