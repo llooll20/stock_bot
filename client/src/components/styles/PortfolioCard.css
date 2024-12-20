@@ -1,0 +1,6 @@
+.card_container{
+    width: 100%;
+    display: flex;
+    background-color: floralwhite;
+    margin: 10px;
+}

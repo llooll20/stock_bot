@@ -1,11 +1,18 @@
 import ChartCard from "./ChartCard";
+import "./styles/Portfolio.css";
 
-function PortfolioCard({ data }) {
+function PortfolioCard({ id, onDelete, data }) {
+  const handleClick = (e) => {
+    onDelete(e.target.id);
+  };
   return (
-    <>
+    <li className="card_container">
       <ChartCard startDate={data.start} endDate={data.end} />
-      <strong>{data.comment}</strong>
-    </>
+      <div>{data.comment}</div>
+      <button id={id} onClick={handleClick} className="deleteBtn">
+        포트폴리오 삭제하기
+      </button>
+    </li>
   );
 }
 

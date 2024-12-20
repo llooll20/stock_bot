@@ -38,11 +38,12 @@ function Portfolio() {
 
   const handleAddPortfolio = async () => {
     const newPortfolio = {
-      id: Date.now(),
+      id: currentPortfolioData.length,
       startDate,
       endDate,
       comment,
     };
+
     /* post to server */
     try {
       const res = await Fetcher.post(
@@ -69,15 +70,27 @@ function Portfolio() {
   const handlePortfolio = () => {
     setShowInput(true);
   };
-  console.log(currentPortfolioData);
+
+  const handleDelete = async (id) => {
+    try {
+      const selectId = parseInt(id) + 1;
+
+      await Fetcher.delete(`/api/delete_portfolio`);
+      setCurrentPortfolio((prevPortfolio) =>
+        prevPortfolio.filter((portfolio) => portfolio.id !== selectId)
+      );
+    } catch (error) {
+      console.error(`포트폴리오 삭제 도중 오류 발생`, error);
+    }
+  };
 
   return (
     <div className="portfolio_container">
       <ul>
         {currentPortfolioData.map((data, idx) => (
-          <li key={idx}>
-            <Card data={data} />
-          </li>
+          <div key={idx}>
+            <Card id={idx} onDelete={handleDelete} data={data} />
+          </div>
         ))}
       </ul>
       {!showInput && (
