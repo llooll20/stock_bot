@@ -5,7 +5,7 @@ import {
   loadCSVData,
   getData,
   insertUserData,
-  insertScrapData,
+  insertPortfolioData,
 } from "./db.js";
 import db from "./lib/varDB.js";
 import passport from "passport";
@@ -50,6 +50,7 @@ const SetUpTable = async () => {
   try {
     await initialize();
     console.log("데이터베이스가 초기화되었습니다.");
+    insertPortfolioData(1,"2012","2013","하하하핳");
 
     const countResult = await new Promise((resolve, reject) => {
       db.get("SELECT COUNT(*) as count FROM stock_data", (err, row) => {
