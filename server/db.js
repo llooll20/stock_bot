@@ -55,13 +55,13 @@ export const InitDatabase = () => {
     )
   });
 
-  //스크랩 데이터베이스 초기화
-  const createScrapTable = new Promise((resolve, reject) => {
+  //포폴 데이터베이스 초기화
+  const createportfolioTable = new Promise((resolve, reject) => {
     db.run(
       `
-      CREATE TABLE IF NOT EXISTS scrap(
+      CREATE TABLE IF NOT EXISTS portfolio(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        owner TEXT NOT NULL,
+        owner INTEGER NOT NULL,
         start TEXT NULL,
         end TEXT NULL,
         comment TEXT NULL
@@ -69,10 +69,10 @@ export const InitDatabase = () => {
       `,
       (err) => {
         if(err){
-          console.log("스크랩 테이블 생성 실패", err.message);
+          console.log("포폴 테이블 생성 실패", err.message);
           reject(err);
         } else{
-          console.log("스크랩 테이블 생성 성공");
+          console.log("포폴 테이블 생성 성공");
           resolve();
         }
       }
@@ -80,7 +80,7 @@ export const InitDatabase = () => {
   });
 
 
-  return Promise.all([createStockTable, createUserTable, createScrapTable]);
+  return Promise.all([createStockTable, createUserTable, createportfolioTable]);
 };
 
 // 데이터 삽입 함수
@@ -234,24 +234,24 @@ export const insertUserData = (id, password) => {
   });
 };
 
-//스크랩 데이터베이스 관련코드드
+//포폴 데이터베이스 관련코드드
 
-//스크랩 데이터베이스에 값 입력
-export const insertScrapData = (id, start, end, comment) => {
+//포폴폴 데이터베이스에 값 입력
+export const insertPortfolioData = (id, start, end, comment) => {
   return new Promise ((resolve, reject) => {
     const stmt = db.prepare(
       `
-      INSERT INTO scrap
+      INSERT INTO portfolio
       (owner, start, end, comment)
       VALUES (?,?,?,?)
       `
     );
     stmt.run(id, start, end, comment, function(err) {
       if (err) {
-        console.err("스크랩 데이터 삽입 오류:", err.message);
+        console.err("포폴 데이터 삽입 오류:", err.message);
         reject(err);
       } else{
-        console.log("스크랩 데이터 삽입 성공");
+        console.log("포폴 데이터 삽입 성공");
         resolve();
       }
     })
@@ -263,6 +263,6 @@ export const insertScrapData = (id, start, end, comment) => {
   });
 };
 
-//스크랩 데이터베이스에서 특정사용자의 시작, 끝값 모두 가져오기 (리스트 형태)
+//포폴 데이터베이스에서 특정사용자의 시작, 끝값 모두 가져오기 (리스트 형태)
 
-//스크랩 데이터베이스에서 값 삭제하기
+//포폴 데이터베이스에서 값 삭제하기
