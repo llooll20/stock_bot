@@ -50,7 +50,7 @@ const SetUpTable = async () => {
   try {
     await initialize();
     console.log("데이터베이스가 초기화되었습니다.");
-    insertPortfolioData(1,"2012","2013","하하하핳");
+    insertPortfolioData(1, "2012", "2013", "하하하핳");
 
     const countResult = await new Promise((resolve, reject) => {
       db.get("SELECT COUNT(*) as count FROM stock_data", (err, row) => {
@@ -78,6 +78,13 @@ SetUpTable();
 app.get("/", async (req, res) => {
   const chartData = await getData();
   res.json(chartData);
+});
+
+// 포트폴리오 추가 API
+app.post("/api/upadte_portfolio", (req, res) => {
+  const { body } = req;
+  console.log(body);
+  res.status(201).json({ message: "update portfolio success" });
 });
 
 // 회원가입 API

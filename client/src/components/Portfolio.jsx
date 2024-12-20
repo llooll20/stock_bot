@@ -29,6 +29,20 @@ function Portfolio() {
       comment,
     };
     /* post to server */
+    try {
+      const res = axios.post(
+        "http://localhost:5000/api/upadte_portfolio",
+        {
+          startDate,
+          endDate,
+          comment,
+        },
+        { withCredentials: true }
+      );
+      console.log(res.data.message);
+    } catch (error) {
+      console.log(`post Error`);
+    }
     setPortfolioData((prev) => [...prev, newPortfolio]);
 
     setStartDate("");
@@ -62,6 +76,7 @@ function Portfolio() {
               type="date"
               value={startDate}
               min={START_DATE}
+              max={"2024-04-01"}
               onChange={(e) => setStartDate(e.target.value)}
             />
           </div>
