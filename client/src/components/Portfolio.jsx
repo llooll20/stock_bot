@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Card from "./PortfolioCard";
-import axios from "axios";
+import Fetcher from "../Fetcher";
 import "./styles/Portfolio.css";
 
 function Portfolio() {
@@ -20,8 +20,10 @@ function Portfolio() {
 
   const fetchPortfolio = async () => {
     try {
-      /* const response = await axios.get("http://localhost:5000/api/portfolio");
-      setCurrentPortfolio(response.data); */
+      const res = await Fetcher.get("http://localhost:5000/api/portfolio");
+      console.log(res.data);
+
+      setCurrentPortfolio(res.data);
       setCurrentPortfolio([]);
     } catch (error) {
       console.error("포트폴리오 데이터를 가져오는 중 오류 발생:", error);
@@ -36,7 +38,7 @@ function Portfolio() {
     return date.toISOString().slice(0, 10); // YYYY-MM-DD
   };
 
-  const handleAddPortfolio = () => {
+  const handleAddPortfolio = async () => {
     const newPortfolio = {
       id: Date.now(),
       startDate,
@@ -45,7 +47,7 @@ function Portfolio() {
     };
     /* post to server */
     try {
-      const res = axios.post(
+      const res = await Fetcher.post(
         "http://localhost:5000/api/upadte_portfolio",
         {
           startDate,

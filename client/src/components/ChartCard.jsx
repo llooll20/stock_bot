@@ -1,6 +1,6 @@
 import ApexChart from "react-apexcharts";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import Fetcher from "../Fetcher";
 
 function ChartCard({ startDate, endDate }) {
   const [chartData, setChartData] = useState([]);
@@ -9,7 +9,7 @@ function ChartCard({ startDate, endDate }) {
   }, [startDate, endDate]);
   const fetchChartData = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/range_chart", {
+      const res = await Fetcher.get("http://localhost:5000/api/range_chart", {
         params: {
           startDate,
           endDate,

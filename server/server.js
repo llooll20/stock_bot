@@ -7,7 +7,7 @@ import {
   insertUserData,
   insertPortfolioData,
   getDateSector,
-  getAllUserPortfolio
+  getAllUserPortfolio,
 } from "./db.js";
 import db from "./lib/varDB.js";
 import passport from "passport";
@@ -46,13 +46,10 @@ app.use(passport.initialize()); //passport초기화
 app.use(passport.session()); //passport 세션 연결
 
 initializePassport(passport); //초기화 실행
-//초기화 반복 방지
 
 const SetUpTable = async () => {
   try {
     await initialize();
-    //console.log("데이터베이스가 초기화되었습니다.");
-    //insertPortfolioData(1, "2012", "2013", "하하하핳");
 
     const countResult = await new Promise((resolve, reject) => {
       db.get("SELECT COUNT(*) as count FROM stock_data", (err, row) => {
@@ -82,19 +79,10 @@ app.get("/", async (req, res) => {
   res.json(chartData);
 });
 
-// 포트폴리오 정보 가져오는 API
-app.get("/api/portfolio", (req, res) => {
-  try {
-  } catch (error) {
-    console.error(`포트폴리오 정보를 가져올 수 없음.`);
-    res.status(500).json({ message: `포트폴리오 정보를 가져올 수 없음.` });
-  }
-});
-
 // 포트폴리오 추가 API
 app.post("/api/upadte_portfolio", (req, res) => {
-  const { body } = req;
-  console.log(body);
+  const { startDate, endDate, comment } = req.body;
+  insertPortfolioData(1, startDate, endDate, comment);
   res.status(201).json({ message: "update portfolio success" });
 });
 
@@ -111,14 +99,13 @@ app.get("/api/range_chart", (req, res) => {
 });
 
 //임시 사용자의 포트폴리오 받는 코드
-app.get("/api/user", (req, res) => {
-  if (req.isAuthenticated()) { // 사용자가 인증된 상태인지 확인
-    res.status(200).json({ user: req.user });
-    getAllUserPortfolio(req.user.id)
-    .then(rows => {
-      console.log("포폴: ",rows);
-    })
-
+app.get("/api/portfolio", (req, res) => {
+  if (req.isAuthenticated()) {
+    // 사용자가 인증된 상태인지 확인
+    getAllUserPortfolio(req.user.id).then((rows) => {
+      console.log("포폴: ", rows);
+      res.status(200).json(rows);
+    });
   } else {
     res.status(401).json({ message: "Not authenticated" });
   }
