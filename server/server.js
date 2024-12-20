@@ -50,17 +50,8 @@ initializePassport(passport); //초기화 실행
 const SetUpTable = async () => {
   try {
     await initialize();
-    console.log("데이터베이스가 초기화되었습니다.");
-    insertPortfolioData(1, "2012", "2013", "하하하핳");
-
-    //새로 추가된 부분 구간 데이터 가져오기 !!!!!!!!!!!!!!!!!!!!!!!!
-    getDateSector("2024-03-01", "2024-05-01")
-      .then((rows) => {
-        console.log("조회된 데이터:", rows);
-      })
-      .catch((err) => {
-        console.err("조회실패:", err);
-      });
+    //console.log("데이터베이스가 초기화되었습니다.");
+    //insertPortfolioData(1, "2012", "2013", "하하하핳");
 
     const countResult = await new Promise((resolve, reject) => {
       db.get("SELECT COUNT(*) as count FROM stock_data", (err, row) => {
@@ -90,11 +81,26 @@ app.get("/", async (req, res) => {
   res.json(chartData);
 });
 
+// 포트폴리오 정보 가져오는 API
+app.get("/api/portfolio", (req, res) => {});
+
 // 포트폴리오 추가 API
 app.post("/api/upadte_portfolio", (req, res) => {
   const { body } = req;
   console.log(body);
   res.status(201).json({ message: "update portfolio success" });
+});
+
+// 구간 차트 API
+app.get("/api/range_chart", (req, res) => {
+  const { startDate, endDate } = req.query;
+  getDateSector(startDate, endDate)
+    .then((rows) => {
+      res.json(rows);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "fetch error" });
+    });
 });
 
 // 회원가입 API

@@ -7,8 +7,6 @@ const Chart = ({ theme }) => {
 
   const getChartData = async () => {
     const json = await (await fetch("http://localhost:5000/")).json();
-    console.log(json);
-
     const result = json.splice(1);
     const default_ONEYEAR_DATA = result.splice(0, 246);
 
