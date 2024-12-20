@@ -75,7 +75,7 @@ function Portfolio() {
     try {
       const selectId = parseInt(id) + 1;
 
-      await Fetcher.delete(`/api/delete_portfolio`);
+      await Fetcher.delete(`/api/delete_portfolio/${selectId}`);
       setCurrentPortfolio((prevPortfolio) =>
         prevPortfolio.filter((portfolio) => portfolio.id !== selectId)
       );
