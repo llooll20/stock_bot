@@ -9,6 +9,7 @@ import {
   getDateSector,
   getAllUserPortfolio,
   delPortfolio,
+  sub_delPortfolio,
 } from "./db.js";
 import db from "./lib/varDB.js";
 import passport from "passport";
@@ -89,8 +90,11 @@ app.post("/api/upadte_portfolio", (req, res) => {
 
 //포폴 삭제
 app.delete("/api/delete_portfolio/:id", (req, res) => {
-  console.log(req.params.id);
-  delPortfolio(req.params.id);
+  console.log(req.user.id,req.params.id);
+  delPortfolio(req.user.id,req.params.id)
+  .then((result) => {
+    sub_delPortfolio(result);
+  });
   res.send("success to del");
 });
 
