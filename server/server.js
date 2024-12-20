@@ -82,7 +82,7 @@ app.get("/", async (req, res) => {
 // 포트폴리오 추가 API
 app.post("/api/upadte_portfolio", (req, res) => {
   const { startDate, endDate, comment } = req.body;
-  insertPortfolioData(1, startDate, endDate, comment);
+  insertPortfolioData(req.user.id, startDate, endDate, comment);
   res.status(201).json({ message: "update portfolio success" });
 });
 

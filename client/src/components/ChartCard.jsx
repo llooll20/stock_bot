@@ -7,6 +7,7 @@ function ChartCard({ startDate, endDate }) {
   useEffect(() => {
     fetchChartData();
   }, [startDate, endDate]);
+
   const fetchChartData = async () => {
     try {
       const res = await Fetcher.get("http://localhost:5000/api/range_chart", {

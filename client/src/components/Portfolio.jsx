@@ -21,10 +21,8 @@ function Portfolio() {
   const fetchPortfolio = async () => {
     try {
       const res = await Fetcher.get("http://localhost:5000/api/portfolio");
-      console.log(res.data);
 
       setCurrentPortfolio(res.data);
-      setCurrentPortfolio([]);
     } catch (error) {
       console.error("포트폴리오 데이터를 가져오는 중 오류 발생:", error);
     }
@@ -71,12 +69,13 @@ function Portfolio() {
   const handlePortfolio = () => {
     setShowInput(true);
   };
+  console.log(currentPortfolioData);
 
   return (
     <div className="portfolio_container">
       <ul>
-        {currentPortfolioData.map((data) => (
-          <li key={data.id}>
+        {currentPortfolioData.map((data, idx) => (
+          <li key={idx}>
             <Card data={data} />
           </li>
         ))}

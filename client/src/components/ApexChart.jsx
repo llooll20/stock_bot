@@ -1,6 +1,5 @@
 import ApexChart from "react-apexcharts";
 import { useEffect, useState } from "react";
-import Fetcher from "../Fetcher";
 
 const Chart = ({ theme }) => {
   const [chartData, setChartData] = useState([]);
