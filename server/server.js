@@ -148,6 +148,16 @@ app.post("/api/login", (req, res, next) => {
   })(req, res, next);
 });
 
+//로그아웃
+app.get("/api/logout", async (req,res, next)=>{
+  req.logOut((err) => {
+    if(err) {
+      return next(err);
+    }
+    res.redirect("/");
+  })
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
